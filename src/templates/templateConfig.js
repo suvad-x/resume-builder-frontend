@@ -1,0 +1,111 @@
+// ============================================
+// TEMPLATE CONFIGS — the "recipes"
+// Add a new template by adding an object here.
+// The renderer reads these; you never touch layout code.
+// ============================================
+
+export const TEMPLATES = [
+  {
+    id: "azure",
+    name: "Azure ★",
+    layout: "two-column", // two-column | single
+    font: "'Poppins', sans-serif",
+    accent: "#2563eb",
+    accentSoft: "#eff6ff",
+    sidebarBg: "#1e293b",
+    sidebarText: "#e2e8f0",
+    sidebarHeading: "#38bdf8",
+    headerStyle: "banner", // banner | line | plain | centered
+    headerBg: "linear-gradient(120deg, #0ea5e9, #2563eb)",
+    headerText: "#ffffff",
+    skillStyle: "bar", // bar | chip | dot
+    showPhoto: true,
+    sidebar: ["contact", "skills", "languages"],
+    main: ["summary", "experience", "education", "certifications"],
+  },
+  {
+    id: "onyx",
+    name: "Onyx",
+    layout: "two-column",
+    font: "'Poppins', sans-serif",
+    accent: "#111827",
+    accentSoft: "#f3f4f6",
+    sidebarBg: "#111827",
+    sidebarText: "#e5e7eb",
+    sidebarHeading: "#9ca3af",
+    headerStyle: "line",
+    headerBg: "#ffffff",
+    headerText: "#111827",
+    skillStyle: "dot",
+    showPhoto: true,
+    sidebar: ["contact", "skills", "languages"],
+    main: ["summary", "experience", "education", "certifications"],
+  },
+  {
+    id: "coral",
+    name: "Coral",
+    layout: "two-column",
+    font: "'Poppins', sans-serif",
+    accent: "#db2777",
+    accentSoft: "#fce7f3",
+    sidebarBg: "#db2777",
+    sidebarText: "#fdf2f8",
+    sidebarHeading: "#fbcfe8",
+    headerStyle: "plain",
+    headerBg: "#ffffff",
+    headerText: "#db2777",
+    skillStyle: "bar",
+    showPhoto: true,
+    sidebar: ["contact", "skills", "languages"],
+    main: ["summary", "experience", "education", "certifications"],
+  },
+  {
+    id: "classic",
+    name: "Classic",
+    layout: "single",
+    font: "Georgia, 'Times New Roman', serif",
+    accent: "#4b5563",
+    accentSoft: "#f3f4f6",
+    headerStyle: "line",
+    headerBg: "#ffffff",
+    headerText: "#111827",
+    skillStyle: "chip",
+    showPhoto: false,
+    sidebar: [],
+    main: ["summary", "experience", "education", "skills", "languages", "certifications"],
+  },
+  {
+    id: "minimal",
+    name: "Minimal",
+    layout: "single",
+    font: "'Inter', sans-serif",
+    accent: "#64748b",
+    accentSoft: "#f8fafc",
+    headerStyle: "plain",
+    headerBg: "#ffffff",
+    headerText: "#0f172a",
+    skillStyle: "chip",
+    showPhoto: false,
+    sidebar: [],
+    main: ["summary", "experience", "education", "skills", "languages", "certifications"],
+  },
+  {
+    id: "elegant",
+    name: "Elegant",
+    layout: "single",
+    font: "'Playfair Display', Georgia, serif",
+    accent: "#9333ea",
+    accentSoft: "#f5e8ff",
+    headerStyle: "centered",
+    headerBg: "#ffffff",
+    headerText: "#111827",
+    skillStyle: "chip",
+    showPhoto: false,
+    sidebar: [],
+    main: ["summary", "experience", "education", "skills", "languages", "certifications"],
+  },
+];
+
+export function getTemplate(id) {
+  return TEMPLATES.find((t) => t.id === id) || TEMPLATES[0];
+}

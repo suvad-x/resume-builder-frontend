@@ -1,0 +1,316 @@
+/* ===== Register Page ===== */
+.register-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: #f4f5fb;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.register-shell {
+  width: 100%;
+  max-width: 1080px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #ffffff;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px -20px rgba(30, 27, 75, 0.25);
+  animation: shell-in 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes shell-in {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== Left Brand Panel ===== */
+.register-brand {
+  position: relative;
+  padding: 56px 48px;
+  background: linear-gradient(150deg, #4f46e5 0%, #7c3aed 55%, #9333ea 100%);
+  color: #fff;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.brand-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.5;
+}
+.brand-glow-1 {
+  width: 260px; height: 260px;
+  background: #a78bfa;
+  top: -60px; right: -60px;
+  animation: float 8s ease-in-out infinite;
+}
+.brand-glow-2 {
+  width: 220px; height: 220px;
+  background: #6366f1;
+  bottom: -50px; left: -40px;
+  animation: float 10s ease-in-out infinite reverse;
+}
+@keyframes float {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(20px, -20px); }
+}
+
+.brand-content { position: relative; z-index: 1; }
+
+.brand-logo {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-bottom: 40px;
+}
+
+.brand-heading {
+  font-size: 30px;
+  line-height: 1.25;
+  font-weight: 700;
+  margin: 0 0 16px;
+  letter-spacing: -0.5px;
+}
+
+.brand-text {
+  font-size: 15px;
+  line-height: 1.6;
+  opacity: 0.9;
+  margin: 0 0 28px;
+}
+
+.brand-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.brand-list li {
+  position: relative;
+  padding-left: 30px;
+  font-size: 15px;
+  opacity: 0.95;
+}
+.brand-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px; height: 20px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* ===== Right Form Panel ===== */
+.register-panel {
+  padding: 48px 44px;
+  display: flex;
+  align-items: center;
+}
+
+.register-card { width: 100%; }
+
+.register-header { margin-bottom: 28px; }
+
+.register-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 8px;
+  letter-spacing: -0.5px;
+}
+
+.register-subtitle {
+  font-size: 15px;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* ===== Alerts ===== */
+.register-alert {
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  margin-bottom: 20px;
+  animation: alert-in 0.3s ease;
+}
+@keyframes alert-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.register-alert-success {
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #a7f3d0;
+}
+.register-alert-error {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+/* ===== Form ===== */
+.form-group { margin-bottom: 18px; }
+
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 7px;
+}
+
+.input-wrapper { position: relative; }
+
+.form-input {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 15px;
+  color: #111827;
+  background: #f9fafb;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 12px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  box-sizing: border-box;
+}
+.form-input::placeholder { color: #9ca3af; }
+.form-input:focus {
+  border-color: #7c3aed;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.12);
+}
+.form-input.input-error {
+  border-color: #ef4444;
+  background: #fff;
+}
+.form-input.input-error:focus {
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.12);
+}
+
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #7c3aed;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 6px;
+}
+.toggle-password:hover { color: #5b21b6; }
+
+.error-text {
+  display: block;
+  color: #ef4444;
+  font-size: 12.5px;
+  margin-top: 6px;
+  animation: alert-in 0.2s ease;
+}
+
+/* ===== Password Strength ===== */
+.strength-meter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+.strength-bars {
+  display: flex;
+  gap: 5px;
+  flex: 1;
+}
+.strength-bar {
+  height: 5px;
+  flex: 1;
+  border-radius: 4px;
+  background: #e5e7eb;
+  transition: background 0.3s;
+}
+.strength-bar.strength-1 { background: #ef4444; }
+.strength-bar.strength-2 { background: #f59e0b; }
+.strength-bar.strength-3 { background: #3b82f6; }
+.strength-bar.strength-4 { background: #10b981; }
+
+.strength-label {
+  font-size: 12px;
+  font-weight: 600;
+  min-width: 44px;
+}
+.strength-label-1 { color: #ef4444; }
+.strength-label-2 { color: #f59e0b; }
+.strength-label-3 { color: #3b82f6; }
+.strength-label-4 { color: #10b981; }
+
+/* ===== Button ===== */
+.register-button {
+  width: 100%;
+  padding: 13px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: transform 0.15s, box-shadow 0.2s, opacity 0.2s;
+  box-shadow: 0 8px 20px -6px rgba(124, 58, 237, 0.5);
+}
+.register-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 26px -6px rgba(124, 58, 237, 0.6);
+}
+.register-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+.register-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* ===== Footer ===== */
+.register-footer {
+  text-align: center;
+  font-size: 14px;
+  color: #6b7280;
+  margin: 24px 0 0;
+}
+.register-link {
+  color: #7c3aed;
+  font-weight: 600;
+  text-decoration: none;
+}
+.register-link:hover { text-decoration: underline; }
+
+/* ===== Responsive ===== */
+@media (max-width: 860px) {
+  .register-shell {
+    grid-template-columns: 1fr;
+    max-width: 460px;
+  }
+  .register-brand { display: none; }
+  .register-panel { padding: 40px 32px; }
+}
+
+@media (max-width: 480px) {
+  .register-page { padding: 16px; }
+  .register-panel { padding: 32px 22px; }
+  .register-title { font-size: 24px; }
+}

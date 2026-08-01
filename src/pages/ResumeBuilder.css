@@ -378,13 +378,13 @@
    ============================================ */
 .builder-preview .rr-sheet {
   transform-origin: top left;
-  transform: scale(0.8);          /* desktop preview */
+  transform: scale(0.7);          /* desktop preview */
   margin-bottom: -337px;          /* 1123 * (1 - 0.7) ≈ 337 removes the empty gap */
 }
 
 @media (max-width: 960px) {
   .builder-preview .rr-sheet {
-    transform: scale(0.65);
+    transform: scale(0.62);
     margin-bottom: -427px;        /* 1123 * (1 - 0.62) ≈ 427 */
   }
 }
@@ -396,9 +396,9 @@
   }
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 400px) {
   .builder-preview .rr-sheet {
-    transform: scale(0.42);
+    transform: scale(0.36);
     margin-bottom: -719px;        /* 1123 * (1 - 0.36) ≈ 719 */
   }
 }

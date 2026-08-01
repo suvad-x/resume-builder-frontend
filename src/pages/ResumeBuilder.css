@@ -626,14 +626,22 @@
   .builder-row, .builder-row-3 { grid-template-columns: 1fr; }
 }
 
-/* ===== Mobile: scale the WHOLE resume page down so it fits the phone,
-   keeping its real proportions (two columns stay two columns) ===== */
+/* ===== Mobile: shrink the whole resume so the FULL page fits the phone ===== */
 @media (max-width: 640px) {
-  .builder-preview { overflow: hidden; }
+  .builder-preview {
+    overflow: hidden;
+  }
   .builder-preview .resume-sheet {
-    width: 480px;                    /* real desktop-ish page width */
-    transform: scale(0.72);          /* shrink to fit the phone */
+    width: 640px;
+    transform: scale(0.56);
     transform-origin: top left;
-    margin-bottom: -180px;           /* pull up the empty space the scale leaves */
+    margin-bottom: -280px;
+  }
+}
+
+@media (max-width: 420px) {
+  .builder-preview .resume-sheet {
+    transform: scale(0.46);
+    margin-bottom: -340px;
   }
 }

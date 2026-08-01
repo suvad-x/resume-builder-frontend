@@ -94,6 +94,41 @@
   box-shadow: 0 6px 14px -6px rgba(124, 58, 237, 0.6);
 }
 
+/* ===== Color picker ===== */
+.builder-colors {
+  margin-bottom: 22px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid #f1f2f7;
+}
+.builder-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.builder-swatch {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1.5px #e5e7eb;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.builder-swatch:hover { transform: scale(1.12); }
+.builder-swatch.is-active {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #7c3aed;
+  transform: scale(1.12);
+}
+.builder-swatch-default {
+  background: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #6b7280;
+}
+
 /* ===== Photo upload ===== */
 .builder-photo {
   margin-bottom: 22px;
@@ -493,7 +528,7 @@
 .template-elegant .sheet-bullets { text-align: left; max-width: 80%; margin-left: auto; margin-right: auto; }
 
 /* ============================================
-   PREMIUM TEMPLATE ★ — two-column, banner, icons, skill bars
+   PREMIUM TEMPLATE ★
    ============================================ */
 .template-premium { font-family: "Poppins", "Inter", sans-serif; }
 .resume-sheet.template-premium.is-sidebar { grid-template-columns: 36% 1fr; }
@@ -580,7 +615,7 @@
 }
 .template-premium .sheet-bullets li::marker { color: #2563eb; }
 
-/* ===== Responsive ===== */
+/* ===== Responsive: editor stacks below preview ===== */
 @media (max-width: 960px) {
   .builder-inner { grid-template-columns: 1fr; }
   .builder-preview { position: static; }
@@ -589,69 +624,16 @@
   .builder { padding: 28px 16px 48px; }
   .builder-editor { padding: 26px 20px; }
   .builder-row, .builder-row-3 { grid-template-columns: 1fr; }
-  .resume-sheet:not(.is-sidebar) { padding: 30px 24px; }
-  .resume-sheet.is-sidebar { grid-template-columns: 1fr; }
-  .sheet-main { padding: 24px 22px; }
-  .sheet-contact-grid { grid-template-columns: 1fr; }
 }
-/* ===== Color picker ===== */
-.builder-colors {
-  margin-bottom: 22px;
-  padding-bottom: 22px;
-  border-bottom: 1px solid #f1f2f7;
-}
-.builder-swatches {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-.builder-swatch {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: 2px solid #fff;
-  box-shadow: 0 0 0 1.5px #e5e7eb;
-  cursor: pointer;
-  padding: 0;
-  transition: transform 0.15s, box-shadow 0.15s;
-}
-.builder-swatch:hover {
-  transform: scale(1.12);
-}
-.builder-swatch.is-active {
-  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #7c3aed;
-  transform: scale(1.12);
-}
-.builder-swatch-default {
-  background: #fff;
-  display: grid;
-  place-items: center;
-  font-size: 13px;
-  font-weight: 700;
-  color: #6b7280;
-}
-/* ===== Mobile: scale the A4 preview to fit the screen ===== */
-@media (max-width: 640px) {
-  .builder-preview {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-  /* The A4 sheet — scale it down so the whole page fits the phone width */
-  .builder-preview .resume-sheet,
-  .builder-preview [class*="sheet"] {
-    transform: scale(0.52);
-    transform-origin: top left;
-    /* Compensate for the scale so the container doesn't leave huge empty space */
-    margin-bottom: -46%;
-  }
-}
-/* ===== Mobile: scale the A4 preview so the whole page fits ===== */
+
+/* ===== Mobile: scale the WHOLE resume page down so it fits the phone,
+   keeping its real proportions (two columns stay two columns) ===== */
 @media (max-width: 640px) {
   .builder-preview { overflow: hidden; }
-  .builder-preview .rr-sheet {
-    width: 420px;                 /* fixed "desktop-like" width */
-    transform: scale(0.82);       /* shrink to fit phone */
-    transform-origin: top center;
-    margin: 0 auto -80px;         /* pull up the empty space the scale leaves */
+  .builder-preview .resume-sheet {
+    width: 480px;                    /* real desktop-ish page width */
+    transform: scale(0.72);          /* shrink to fit the phone */
+    transform-origin: top left;
+    margin-bottom: -180px;           /* pull up the empty space the scale leaves */
   }
 }

@@ -195,3 +195,22 @@
 @media (max-width: 560px) {
   .rr-single { padding: 30px 24px; }
 }
+/* ===== Force all resume content to wrap & never overflow ===== */
+.rr-sheet,
+.rr-sheet * {
+  min-width: 0;                    /* lets grid/flex children shrink instead of overflowing */
+  overflow-wrap: break-word;       /* long words wrap instead of spilling out */
+  word-break: break-word;
+}
+
+/* Dates/tags shouldn't force a fixed width that pushes content off-screen */
+.rr-entry-head {
+  flex-wrap: wrap;                 /* title + date wrap onto two lines if tight */
+}
+.rr-entry-date {
+  white-space: normal;             /* allow the date to wrap instead of forcing width */
+}
+
+/* Make sure the two-column grid children can shrink */
+.rr-two-col { min-width: 0; }
+.rr-main, .rr-sidebar, .rr-main-body { min-width: 0; }

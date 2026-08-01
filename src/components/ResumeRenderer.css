@@ -190,8 +190,8 @@
 .template-elegant .rr-text { text-align: center; }
 
 /* ===== Responsive ===== */
+/* Keep the resume as a real page (two columns stay two columns).
+   The preview is scaled down to fit small screens in ResumeBuilder.css. */
 @media (max-width: 560px) {
-  .rr-two-col { grid-template-columns: 1fr; }
   .rr-single { padding: 30px 24px; }
-  .rr-two-col .rr-main-body .rr-section { padding: 0 24px; }
 }

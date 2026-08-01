@@ -630,3 +630,28 @@
   font-weight: 700;
   color: #6b7280;
 }
+/* ===== Mobile: scale the A4 preview to fit the screen ===== */
+@media (max-width: 640px) {
+  .builder-preview {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  /* The A4 sheet — scale it down so the whole page fits the phone width */
+  .builder-preview .resume-sheet,
+  .builder-preview [class*="sheet"] {
+    transform: scale(0.52);
+    transform-origin: top left;
+    /* Compensate for the scale so the container doesn't leave huge empty space */
+    margin-bottom: -46%;
+  }
+}
+/* ===== Mobile: scale the A4 preview so the whole page fits ===== */
+@media (max-width: 640px) {
+  .builder-preview { overflow: hidden; }
+  .builder-preview .rr-sheet {
+    width: 420px;                 /* fixed "desktop-like" width */
+    transform: scale(0.82);       /* shrink to fit phone */
+    transform-origin: top center;
+    margin: 0 auto -80px;         /* pull up the empty space the scale leaves */
+  }
+}

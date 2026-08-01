@@ -10,7 +10,6 @@ import "./ResumeBuilder.css";
 
 const CURRENT_USER_KEY = "currentUser";
 
-// Color presets the user can pick from
 const COLOR_PRESETS = [
   { name: "Blue", accent: "#2563eb", soft: "#eff6ff", sidebar: "#1e293b", heading: "#38bdf8" },
   { name: "Violet", accent: "#7c3aed", soft: "#f3f0ff", sidebar: "#2e1065", heading: "#c4b5fd" },
@@ -84,7 +83,6 @@ function normalizeForm(form) {
   }
   if (!Array.isArray(next.experience)) next.experience = [];
   if (!Array.isArray(next.education)) next.education = [];
-  // Ensure each entry has an id for React keys (backend stores them without ids)
   next.experience = next.experience.map((exp) => ({ ...emptyExperience(), ...exp }));
   next.education = next.education.map((ed) => ({ ...emptyEducation(), ...ed }));
   return next;
@@ -102,7 +100,6 @@ function ResumeBuilder() {
   const [templateId, setTemplateId] = useState(
     incoming?.template || location.state?.template || TEMPLATES[0].id
   );
-  // Custom color override (null = use the template's own colors)
   const [colorOverride, setColorOverride] = useState(incoming?.color || null);
   const [editingId, setEditingId] = useState(incoming?._id || null);
   const [saveMessage, setSaveMessage] = useState("");
@@ -112,7 +109,6 @@ function ResumeBuilder() {
   const fileRef = useRef(null);
   const sheetRef = useRef(null);
 
-  // Build the active config: base template + any color override
   const baseConfig = getTemplate(templateId);
   const config = colorOverride
     ? {
@@ -202,7 +198,6 @@ function ResumeBuilder() {
       return;
     }
 
-    // What we send to the backend (owner is set server-side from the token)
     const payload = {
       template: templateId,
       color: colorOverride,
@@ -216,11 +211,9 @@ function ResumeBuilder() {
     setSaveMessage("");
     try {
       if (editingId) {
-        // Update existing resume
         await api.put(`/resumes/${editingId}`, payload);
         setSaveMessage("Resume updated! You can find it on your dashboard.");
       } else {
-        // Create new resume — capture the new _id so further saves update it
         const { data } = await api.post("/resumes", payload);
         if (data?._id) setEditingId(data._id);
         setSaveMessage("Resume saved! You can find it on your dashboard.");
@@ -239,16 +232,43 @@ function ResumeBuilder() {
     }
   }
 
+  // ===== PDF download — forces full A4 width so text never breaks/squishes =====
   async function handleDownload() {
     if (!sheetRef.current) return;
     setDownloading(true);
     setSaveMessage("");
+
+    const sheet = sheetRef.current;
+
+    // Remember the current on-screen styles so we can restore them after
+    const prev = {
+      width: sheet.style.width,
+      maxWidth: sheet.style.maxWidth,
+      transform: sheet.style.transform,
+      marginBottom: sheet.style.marginBottom,
+      borderRadius: sheet.style.borderRadius,
+    };
+
     try {
-      const canvas = await html2canvas(sheetRef.current, {
+      // Force the resume to full desktop A4 width for a clean capture,
+      // regardless of whether we're on a phone or PC.
+      sheet.style.width = "794px";       // A4 width in px at 96dpi
+      sheet.style.maxWidth = "none";
+      sheet.style.transform = "none";    // undo the mobile scale
+      sheet.style.marginBottom = "0";
+      sheet.style.borderRadius = "0";
+
+      // Give the browser a moment to re-layout at the new width
+      await new Promise((r) => setTimeout(r, 80));
+
+      const canvas = await html2canvas(sheet, {
         scale: 2,
         useCORS: true,
         backgroundColor: "#ffffff",
+        width: 794,
+        windowWidth: 794,
       });
+
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF("p", "mm", "a4");
       const pageWidth = pdf.internal.pageSize.getWidth();
@@ -270,12 +290,17 @@ function ResumeBuilder() {
     } catch {
       setSaveMessage("Couldn't generate the PDF. Please try again.");
     } finally {
+      // Put the on-screen styles back exactly as they were
+      sheet.style.width = prev.width;
+      sheet.style.maxWidth = prev.maxWidth;
+      sheet.style.transform = prev.transform;
+      sheet.style.marginBottom = prev.marginBottom;
+      sheet.style.borderRadius = prev.borderRadius;
       setDownloading(false);
     }
   }
 
   const initial = form.name ? form.name.charAt(0).toUpperCase() : "?";
-  const activeColor = colorOverride?.accent || baseConfig.accent;
 
   return (
     <>
@@ -532,7 +557,7 @@ function ResumeBuilder() {
             </form>
           </section>
 
-          {/* ===== Live Preview (config-driven engine) ===== */}
+          {/* ===== Live Preview ===== */}
           <section className="builder-preview">
             <div className="builder-preview-bar">
               <span className="builder-preview-label">Live preview</span>

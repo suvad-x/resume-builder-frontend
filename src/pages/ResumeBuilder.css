@@ -626,23 +626,24 @@
   .builder-row, .builder-row-3 { grid-template-columns: 1fr; }
 }
 
-/* ===== Mobile: full-width resume preview, compact length ===== */
+/* ===== Mobile: show a small, neat mini A4 preview
+   (real size stays full A4 for the PDF download) ===== */
 @media (max-width: 640px) {
   .builder-preview {
     overflow: hidden;
   }
   .builder-preview .resume-sheet {
-    width: 178%;                 /* 178% × 0.56 ≈ 100% = fills full width */
-    transform: scale(0.56);
+    width: 800px;                 /* full desktop width so words never break mid-word */
+    transform: scale(0.44);       /* shrink the WHOLE page into a neat mini preview */
     transform-origin: top left;
-    margin-bottom: -280px;
+    margin-bottom: -450px;        /* remove the empty gap the scale leaves */
   }
 }
 
 @media (max-width: 420px) {
   .builder-preview .resume-sheet {
-    width: 217%;                 /* 217% × 0.46 ≈ 100% */
-    transform: scale(0.46);
-    margin-bottom: -340px;
+    width: 800px;
+    transform: scale(0.40);
+    margin-bottom: -490px;
   }
 }

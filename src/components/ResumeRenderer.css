@@ -1,14 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap');
 
-/* ===== Sheet base ===== */
+/* ===== Sheet base — FIXED A4 PAGE (794 x 1123 px = A4 @ 96dpi) ===== */
 .rr-sheet {
+  width: 794px;
+  min-height: 1123px;          /* always a full A4 page, even when empty */
   background: #fff;
   border-radius: 10px;
-  min-height: 640px;
   box-shadow: 0 20px 50px -20px rgba(30, 27, 75, 0.35);
   color: #1f2937;
   overflow: hidden;
   font-family: var(--rr-font);
+  box-sizing: border-box;
 }
 
 /* ===== Layout ===== */
@@ -16,35 +18,38 @@
   display: grid;
   grid-template-columns: 35% 1fr;
 }
-.rr-single { padding: 40px 38px; }
+.rr-single { padding: 48px 46px; }
 
 /* ===== Sidebar ===== */
 .rr-sidebar {
   background: var(--rr-sidebar-bg);
   color: var(--rr-sidebar-text);
   padding: 0 0 28px;
+  min-width: 0;
 }
 .rr-photo {
-  width: 108px;
-  height: 108px;
+  width: 116px;
+  height: 116px;
   border-radius: 50%;
   overflow: hidden;
-  margin: 28px auto 20px;
+  margin: 30px auto 22px;
   background: rgba(255, 255, 255, 0.15);
   display: grid;
   place-items: center;
   border: 4px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.4);
+  flex-shrink: 0;
 }
-.rr-photo img { width: 100%; height: 100%; object-fit: cover; }
-.rr-photo span { font-size: 42px; font-weight: 700; color: #fff; }
+.rr-photo img { width: 116px; height: 116px; object-fit: cover; display: block; }
+.rr-photo span { font-size: 46px; font-weight: 700; color: #fff; }
 
 .rr-block {
   padding: 0 22px;
-  margin-top: 22px;
+  margin-top: 24px;
   display: flex;
   flex-direction: column;
   gap: 9px;
+  min-width: 0;
 }
 .rr-block-label {
   font-size: 12px;
@@ -64,8 +69,8 @@
   letter-spacing: 0.5px;
   opacity: 0.65;
 }
-.rr-contact-val { font-size: 12px; line-height: 1.4; word-break: break-word; }
-.rr-block-item { font-size: 12px; line-height: 1.45; opacity: 0.92; }
+.rr-contact-val { font-size: 12px; line-height: 1.4; overflow-wrap: break-word; word-break: break-word; }
+.rr-block-item { font-size: 12px; line-height: 1.45; opacity: 0.92; overflow-wrap: break-word; }
 
 /* ===== Skill styles ===== */
 .rr-skillbars { display: flex; flex-direction: column; gap: 11px; }
@@ -90,24 +95,25 @@
 .rr-skilldot em b.on { background: var(--rr-sidebar-heading); }
 
 /* ===== Main column ===== */
-.rr-main { display: flex; flex-direction: column; }
+.rr-main { display: flex; flex-direction: column; min-width: 0; }
 .rr-main-body { padding: 0; }
-.rr-two-col .rr-main-body .rr-section { padding: 0 32px; margin-top: 20px; }
+.rr-two-col .rr-main-body .rr-section { padding: 0 34px; margin-top: 22px; }
 
 /* ===== Header styles ===== */
 .rr-header { padding-bottom: 16px; margin-bottom: 8px; }
 .rr-name {
-  font-size: 27px;
+  font-size: 28px;
   font-weight: 700;
   margin: 0 0 4px;
   letter-spacing: -0.3px;
+  overflow-wrap: break-word;
 }
-.rr-role { font-size: 15px; font-weight: 500; margin: 0; }
+.rr-role { font-size: 15px; font-weight: 500; margin: 0; overflow-wrap: break-word; }
 
 /* header: banner */
 .rr-header-banner {
   background: var(--rr-header-bg);
-  padding: 32px 32px 26px;
+  padding: 34px 34px 28px;
   margin-bottom: 0;
 }
 .rr-header-banner .rr-name { color: var(--rr-header-text); }
@@ -115,17 +121,17 @@
 
 /* header: line */
 .rr-single .rr-header-line { border-bottom: 2px solid var(--rr-accent); }
-.rr-two-col .rr-header-line { padding: 32px 32px 16px; border-bottom: 2px solid var(--rr-accent-soft); }
+.rr-two-col .rr-header-line { padding: 34px 34px 16px; border-bottom: 2px solid var(--rr-accent-soft); }
 .rr-header-line .rr-name { color: var(--rr-header-text); }
 .rr-header-line .rr-role { color: var(--rr-accent); }
 
 /* header: plain */
-.rr-two-col .rr-header-plain { padding: 32px 32px 12px; }
+.rr-two-col .rr-header-plain { padding: 34px 34px 12px; }
 .rr-header-plain .rr-name { color: var(--rr-header-text); }
 .rr-header-plain .rr-role { color: var(--rr-accent); }
 
 /* header: centered */
-.rr-header-centered { text-align: center; border-bottom: 1px solid var(--rr-accent); padding-bottom: 14px; }
+.rr-header-centered { text-align: center; border-bottom: 1px solid var(--rr-accent); padding-bottom: 16px; }
 .rr-header-centered .rr-name { color: var(--rr-header-text); letter-spacing: 1px; }
 .rr-header-centered .rr-role { color: var(--rr-accent); }
 
@@ -145,7 +151,7 @@
 .rr-header-centered ~ .rr-section .rr-label,
 .rr-single.template-elegant .rr-label { text-align: center; }
 
-.rr-text { font-size: 13.5px; line-height: 1.6; color: #374151; margin: 0; }
+.rr-text { font-size: 13.5px; line-height: 1.6; color: #374151; margin: 0; overflow-wrap: break-word; }
 
 /* ===== Entries ===== */
 .rr-entry { margin-bottom: 13px; }
@@ -155,9 +161,10 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 12px;
+  flex-wrap: wrap;
 }
-.rr-entry-title { display: block; font-size: 14px; font-weight: 700; color: #1e293b; }
-.rr-entry-sub { display: block; font-size: 12.5px; color: #4b5563; margin-top: 1px; }
+.rr-entry-title { display: block; font-size: 14px; font-weight: 700; color: #1e293b; overflow-wrap: break-word; }
+.rr-entry-sub { display: block; font-size: 12.5px; color: #4b5563; margin-top: 1px; overflow-wrap: break-word; }
 .rr-entry-date {
   flex-shrink: 0;
   font-size: 11.5px;
@@ -169,7 +176,7 @@
   white-space: nowrap;
 }
 .rr-bullets { margin: 6px 0 0; padding-left: 18px; }
-.rr-bullets li { font-size: 13px; line-height: 1.55; color: #374151; margin-bottom: 3px; }
+.rr-bullets li { font-size: 13px; line-height: 1.55; color: #374151; margin-bottom: 3px; overflow-wrap: break-word; }
 .rr-bullets li::marker { color: var(--rr-accent); }
 
 /* ===== Chips ===== */
@@ -189,28 +196,6 @@
 .template-elegant .rr-chips { justify-content: center; }
 .template-elegant .rr-text { text-align: center; }
 
-/* ===== Responsive ===== */
-/* Keep the resume as a real page (two columns stay two columns).
-   The preview is scaled down to fit small screens in ResumeBuilder.css. */
-@media (max-width: 560px) {
-  .rr-single { padding: 30px 24px; }
-}
-/* ===== Force all resume content to wrap & never overflow ===== */
-.rr-sheet,
-.rr-sheet * {
-  min-width: 0;                    /* lets grid/flex children shrink instead of overflowing */
-  overflow-wrap: break-word;       /* long words wrap instead of spilling out */
-  word-break: break-word;
-}
-
-/* Dates/tags shouldn't force a fixed width that pushes content off-screen */
-.rr-entry-head {
-  flex-wrap: wrap;                 /* title + date wrap onto two lines if tight */
-}
-.rr-entry-date {
-  white-space: normal;             /* allow the date to wrap instead of forcing width */
-}
-
-/* Make sure the two-column grid children can shrink */
+/* ===== Make sure grid children can shrink (no overflow) ===== */
 .rr-two-col { min-width: 0; }
-.rr-main, .rr-sidebar, .rr-main-body { min-width: 0; }
+.rr-sheet * { min-width: 0; }

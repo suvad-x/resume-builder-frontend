@@ -232,44 +232,56 @@ function ResumeBuilder() {
     }
   }
 
-  // ===== PDF download — forces full A4 width so text never breaks/squishes =====
+  // ===== PDF download — off-screen A4 clone, JPEG for small file size =====
   async function handleDownload() {
     if (!sheetRef.current) return;
     setDownloading(true);
     setSaveMessage("");
 
-    const sheet = sheetRef.current;
+    const original = sheetRef.current;
+    const clone = original.cloneNode(true);
 
-    // Remember the current on-screen styles so we can restore them after
-    const prev = {
-      width: sheet.style.width,
-      maxWidth: sheet.style.maxWidth,
-      transform: sheet.style.transform,
-      marginBottom: sheet.style.marginBottom,
-      borderRadius: sheet.style.borderRadius,
-    };
+    const wrapper = document.createElement("div");
+    wrapper.style.position = "fixed";
+    wrapper.style.left = "-10000px";
+    wrapper.style.top = "0";
+    wrapper.style.width = "794px";
+    wrapper.style.background = "#ffffff";
+
+    clone.style.width = "794px";
+    clone.style.maxWidth = "794px";
+    clone.style.transform = "none";
+    clone.style.margin = "0";
+    clone.style.borderRadius = "0";
+    clone.style.boxShadow = "none";
+
+    wrapper.appendChild(clone);
+    document.body.appendChild(wrapper);
 
     try {
-      // Force the resume to full desktop A4 width for a clean capture,
-      // regardless of whether we're on a phone or PC.
-      sheet.style.width = "794px";       // A4 width in px at 96dpi
-      sheet.style.maxWidth = "none";
-      sheet.style.transform = "none";    // undo the mobile scale
-      sheet.style.marginBottom = "0";
-      sheet.style.borderRadius = "0";
+      const imgs = Array.from(clone.querySelectorAll("img"));
+      await Promise.all(
+        imgs.map((img) =>
+          img.complete
+            ? Promise.resolve()
+            : new Promise((res) => {
+                img.onload = res;
+                img.onerror = res;
+              })
+        )
+      );
+      await new Promise((r) => setTimeout(r, 100));
 
-      // Give the browser a moment to re-layout at the new width
-      await new Promise((r) => setTimeout(r, 80));
-
-      const canvas = await html2canvas(sheet, {
-        scale: 2,
+      const canvas = await html2canvas(clone, {
+        scale: 1.6,               // sharp enough, much smaller than scale 2
         useCORS: true,
         backgroundColor: "#ffffff",
         width: 794,
         windowWidth: 794,
       });
 
-      const imgData = canvas.toDataURL("image/png");
+      // JPEG @ 0.85 quality = far smaller file than PNG (10MB -> ~1-2MB)
+      const imgData = canvas.toDataURL("image/jpeg", 0.85);
       const pdf = new jsPDF("p", "mm", "a4");
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();
@@ -277,12 +289,12 @@ function ResumeBuilder() {
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       let heightLeft = imgHeight;
       let position = 0;
-      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
       heightLeft -= pageHeight;
       while (heightLeft > 0) {
         position -= pageHeight;
         pdf.addPage();
-        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+        pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
         heightLeft -= pageHeight;
       }
       const fileName = `${form.name || "resume"}`.replace(/\s+/g, "_").toLowerCase();
@@ -290,12 +302,7 @@ function ResumeBuilder() {
     } catch {
       setSaveMessage("Couldn't generate the PDF. Please try again.");
     } finally {
-      // Put the on-screen styles back exactly as they were
-      sheet.style.width = prev.width;
-      sheet.style.maxWidth = prev.maxWidth;
-      sheet.style.transform = prev.transform;
-      sheet.style.marginBottom = prev.marginBottom;
-      sheet.style.borderRadius = prev.borderRadius;
+      document.body.removeChild(wrapper);
       setDownloading(false);
     }
   }

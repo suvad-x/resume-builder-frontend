@@ -289,3 +289,9 @@
   .hm-hero-actions .hm-btn { flex: 1; }
   .hm-footer-top { grid-template-columns: 1fr; }
 }
+.hm-footer-credit {
+  font-size: 12.5px;
+  color: #94a3b8;
+  margin: 6px 0 0;
+  font-weight: 500;
+}

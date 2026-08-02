@@ -452,6 +452,8 @@ function Home() {
               <span className="hm-footer-mark">R/</span> Resume Builder
             </span>
             <p className="hm-footer-tag">Build. Download. Get hired.</p>
+                        <p className="hm-footer-credit">A project by Suvaid Dawar</p>
+
           </div>
           <div className="hm-footer-col">
             <span className="hm-footer-h">Product</span>

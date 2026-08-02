@@ -1,8 +1,12 @@
-import { useState } from "react";
+import { useState, useRef, useLayoutEffect } from "react";
 import { Link } from "react-router-dom";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Navbar from "../components/Navbar";
 import { TEMPLATES } from "../templates/templateConfig";
 import "./Home.css";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const CURRENT_USER_KEY = "currentUser";
 function isLoggedIn() {
@@ -54,11 +58,21 @@ const FAQS = [
   { q: "Where is my data stored?", a: "Right now everything is saved securely in your browser on this device. Nothing is shared publicly." },
 ];
 
+// Split a stat value like "120K+" into number(120), suffix("K+")
+function parseStat(value) {
+  const match = value.match(/^([\d.]+)(.*)$/);
+  if (!match) return { num: 0, suffix: value };
+  return { num: parseFloat(match[1]), suffix: match[2] };
+}
+
 // ---- Small reusable pieces ----
 function StatCard({ value, label }) {
+  const { num, suffix } = parseStat(value);
   return (
     <div className="hm-stat">
-      <span className="hm-stat-value">{value}</span>
+      <span className="hm-stat-value" data-target={num} data-suffix={suffix}>
+        0{suffix}
+      </span>
       <span className="hm-stat-label">{label}</span>
     </div>
   );
@@ -88,11 +102,155 @@ function Home() {
   const buildTarget = isLoggedIn() ? "/builder" : "/login";
   const templatesTarget = isLoggedIn() ? "/templates" : "/login";
 
-  // First 6 templates for the preview strip
   const previewTemplates = TEMPLATES.slice(0, 6);
 
+  const rootRef = useRef(null);
+
+  useLayoutEffect(() => {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) return;
+
+    const ctx = gsap.context(() => {
+      const EASE = "power3.out";
+      const TOGGLE = "play reverse play reverse";
+
+      const reveal = (targets, trigger, opts = {}) =>
+        gsap.from(targets, {
+          opacity: 0,
+          y: 40,
+          duration: 1,
+          ease: EASE,
+          stagger: 0.12,
+          scrollTrigger: { trigger, start: "top 82%", toggleActions: TOGGLE },
+          ...opts,
+        });
+
+      // ===== 1. HERO — word-by-word title reveal + text timeline =====
+      // Split the hero title into word spans (keeps the accent styling)
+      const titleEl = rootRef.current.querySelector(".hm-hero-title");
+      if (titleEl && !titleEl.dataset.split) {
+        titleEl.dataset.split = "1";
+        const accentEl = titleEl.querySelector(".hm-accent");
+        const accentText = accentEl ? accentEl.textContent : "";
+        // Rebuild: wrap each word in a span; keep the accent word highlighted
+        const raw = titleEl.textContent;
+        const words = raw.split(" ");
+        titleEl.innerHTML = words
+          .map((w) => {
+            const isAccent = accentText && w.replace(/[.,]/g, "") === accentText.replace(/[.,]/g, "");
+            const cls = isAccent ? "hm-word hm-accent" : "hm-word";
+            return `<span class="${cls}" style="display:inline-block">${w}</span>`;
+          })
+          .join(" ");
+      }
+
+      const heroTl = gsap.timeline({ defaults: { ease: EASE } });
+      heroTl
+        .from(".hm-badge", { opacity: 0, y: 20, duration: 0.9 }, 0.1)
+        .from(".hm-hero-title .hm-word", { opacity: 0, y: 40, duration: 0.9, stagger: 0.09 }, 0.25)
+        .from(".hm-hero-sub", { opacity: 0, y: 24, duration: 1 }, 0.9)
+        .from(".hm-hero-actions .hm-btn", { opacity: 0, y: 20, duration: 0.9, stagger: 0.15 }, 1.15)
+        .from(".hm-hero-proof", { opacity: 0, y: 16, duration: 0.9 }, 1.4);
+
+      // ===== PARALLAX — hero glows drift as you scroll =====
+      gsap.to(".hm-glow-1", {
+        y: 120,
+        ease: "none",
+        scrollTrigger: { trigger: ".hm-hero", start: "top top", end: "bottom top", scrub: true },
+      });
+      gsap.to(".hm-glow-2", {
+        y: -90,
+        ease: "none",
+        scrollTrigger: { trigger: ".hm-hero", start: "top top", end: "bottom top", scrub: true },
+      });
+
+      // ===== Button press effect (mouse + touch) =====
+      const pressButtons = document.querySelectorAll(".hm-hero-actions .hm-btn");
+      const pressHandlers = [];
+      pressButtons.forEach((btn) => {
+        const down = () => gsap.to(btn, { scale: 0.94, duration: 0.15, ease: "power2.out" });
+        const up = () => gsap.to(btn, { scale: 1, duration: 0.4, ease: "elastic.out(1, 0.5)" });
+        btn.addEventListener("mousedown", down);
+        btn.addEventListener("mouseup", up);
+        btn.addEventListener("mouseleave", up);
+        btn.addEventListener("touchstart", down, { passive: true });
+        btn.addEventListener("touchend", up);
+        pressHandlers.push({ btn, down, up });
+      });
+      window.__hmPressHandlers = pressHandlers;
+
+      // ===== 2. STATS — fade up + COUNT-UP numbers =====
+      reveal(".hm-stat", ".hm-stats-band", { y: 30, duration: 0.9, stagger: 0.1 });
+
+      // Count-up: animate each stat number from 0 to its target when in view
+      gsap.utils.toArray(".hm-stat-value").forEach((el) => {
+        const target = parseFloat(el.dataset.target) || 0;
+        const suffix = el.dataset.suffix || "";
+        const isDecimal = target % 1 !== 0;
+        const counter = { val: 0 };
+        gsap.to(counter, {
+          val: target,
+          duration: 1.6,
+          ease: "power2.out",
+          scrollTrigger: { trigger: ".hm-stats-band", start: "top 80%", toggleActions: "play none none reset" },
+          onUpdate: () => {
+            const shown = isDecimal ? counter.val.toFixed(1) : Math.round(counter.val);
+            el.textContent = `${shown}${suffix}`;
+          },
+        });
+      });
+
+      // ===== Section headings =====
+      gsap.utils.toArray(".hm-head").forEach((head) => {
+        gsap.from(head, {
+          opacity: 0, y: 30, duration: 1, ease: EASE,
+          scrollTrigger: { trigger: head, start: "top 85%", toggleActions: TOGGLE },
+        });
+      });
+
+      // ===== 3. FEATURES =====
+      reveal(".hm-feature", ".hm-features");
+
+      // ===== 4. STEPS =====
+      reveal(".hm-step", ".hm-steps", { stagger: 0.15 });
+
+      // ===== 5. TEMPLATES — stagger + tiny scale =====
+      gsap.from(".hm-tpl", {
+        opacity: 0, y: 40, scale: 0.96, duration: 1, ease: EASE, stagger: 0.1,
+        scrollTrigger: { trigger: ".hm-templates", start: "top 82%", toggleActions: TOGGLE },
+      });
+
+      // ===== 6. WHY =====
+      reveal(".hm-why-card", ".hm-why", { stagger: 0.15 });
+
+      // ===== 7. TESTIMONIALS =====
+      reveal(".hm-testimonial", ".hm-testimonials", { stagger: 0.15 });
+
+      // ===== 8. FAQ =====
+      reveal(".hm-faq-item", ".hm-faq", { y: 26, duration: 0.9, stagger: 0.1 });
+
+      // ===== 9. CTA =====
+      gsap.from(".hm-cta-inner > *", {
+        opacity: 0, y: 36, duration: 1, ease: EASE, stagger: 0.12,
+        scrollTrigger: { trigger: ".hm-cta", start: "top 82%", toggleActions: TOGGLE },
+      });
+    }, rootRef);
+
+    return () => {
+      ctx.revert();
+      (window.__hmPressHandlers || []).forEach(({ btn, down, up }) => {
+        btn.removeEventListener("mousedown", down);
+        btn.removeEventListener("mouseup", up);
+        btn.removeEventListener("mouseleave", up);
+        btn.removeEventListener("touchstart", down);
+        btn.removeEventListener("touchend", up);
+      });
+      window.__hmPressHandlers = [];
+    };
+  }, []);
+
   return (
-    <>
+    <div ref={rootRef}>
       <Navbar />
 
       {/* ===== 1. Hero ===== */}
@@ -322,7 +480,7 @@ function Home() {
           <span>© {new Date().getFullYear()} Resume Builder. All rights reserved.</span>
         </div>
       </footer>
-    </>
+    </div>
   );
 }
 

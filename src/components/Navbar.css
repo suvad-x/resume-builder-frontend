@@ -1,21 +1,32 @@
-/* ===== Navbar — crisp premium liquid glass ===== */
+/* ============================================
+   NAVBAR — Premium Liquid Glass (Apple style)
+   Crisp on desktop, clean on mobile.
+   ============================================ */
 .navbar {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(255, 255, 255, 0.6);
+  /* The liquid glass surface */
+  background: rgba(255, 255, 255, 0.55);
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 0 4px 24px -12px rgba(30, 27, 75, 0.15);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 30px -14px rgba(30, 27, 75, 0.2);
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
 }
+/* Glossy light sheen along the top edge — the signature "liquid" highlight */
 .navbar::before {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(180deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0) 60%);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0.08) 45%,
+    rgba(255, 255, 255, 0) 100%
+  );
 }
 
 .navbar-inner {
@@ -23,7 +34,7 @@
   z-index: 1;
   max-width: 1180px;
   margin: 0 auto;
-  height: 66px;
+  height: 68px;
   padding: 0 26px;
   display: flex;
   align-items: center;
@@ -43,7 +54,7 @@
   flex-shrink: 0;
   transition: opacity 0.2s;
 }
-.navbar-brand:hover { opacity: 0.8; }
+.navbar-brand:hover { opacity: 0.82; }
 .navbar-mark {
   display: grid;
   place-items: center;
@@ -54,7 +65,8 @@
   color: #fff;
   font-size: 15px;
   font-weight: 800;
-  box-shadow: 0 6px 16px -6px rgba(124, 58, 237, 0.6);
+  box-shadow: 0 6px 16px -6px rgba(124, 58, 237, 0.6),
+              inset 0 1px 1px rgba(255, 255, 255, 0.3);
 }
 
 /* ===== Actions container ===== */
@@ -64,30 +76,49 @@
   gap: 22px;
 }
 
-/* ===== Primary nav — pill hover ===== */
+/* ===== Primary nav — glass pill group with sliding blob ===== */
 .navbar-nav {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 2px;
-  padding: 4px;
-  background: rgba(120, 120, 140, 0.06);
-  border-radius: 14px;
+  padding: 5px;
+  background: rgba(120, 120, 140, 0.07);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
 }
+
+/* The frosted glass blob that slides behind the hovered link */
+.navbar-blob {
+  position: absolute;
+  top: 5px;
+  left: 0;
+  height: calc(100% - 10px);
+  width: 0;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px) saturate(160%);
+  -webkit-backdrop-filter: blur(10px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 6px 18px -6px rgba(30, 27, 75, 0.3),
+              inset 0 1px 1px rgba(255, 255, 255, 0.9);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
 .navbar-link {
   position: relative;
+  z-index: 1;
   font-size: 14px;
   font-weight: 600;
   color: #475569;
   text-decoration: none;
-  padding: 8px 15px;
-  border-radius: 10px;
-  transition: color 0.2s, background 0.2s, box-shadow 0.2s;
+  padding: 8px 16px;
+  border-radius: 11px;
+  transition: color 0.25s ease;
 }
-.navbar-link:hover {
-  color: #4f46e5;
-  background: #fff;
-  box-shadow: 0 2px 10px -4px rgba(30, 27, 75, 0.2);
-}
+.navbar-link:hover { color: #4f46e5; }
 .navbar-link-strong {
   font-weight: 600;
   color: #4338ca;
@@ -108,26 +139,22 @@
 }
 
 /* ===== Profile chip ===== */
+.navbar-user,
 .navbar-user-link {
   display: flex;
   align-items: center;
   gap: 9px;
   text-decoration: none;
-  padding: 5px 12px 5px 5px;
+  padding: 5px 13px 5px 5px;
   border-radius: 999px;
-  background: rgba(120, 120, 140, 0.06);
-  border: 1px solid transparent;
-  transition: background 0.2s, border-color 0.2s;
+  background: rgba(120, 120, 140, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 .navbar-user-link:hover {
-  background: #fff;
-  border-color: rgba(124, 58, 237, 0.2);
-  box-shadow: 0 2px 10px -4px rgba(30, 27, 75, 0.2);
-}
-.navbar-user {
-  display: flex;
-  align-items: center;
-  gap: 9px;
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(124, 58, 237, 0.25);
+  box-shadow: 0 4px 14px -6px rgba(30, 27, 75, 0.25);
 }
 .navbar-avatar {
   display: grid;
@@ -163,12 +190,13 @@
   color: #fff;
   background: linear-gradient(135deg, #4f46e5, #7c3aed);
   padding: 10px 20px;
-  border-radius: 11px;
+  border-radius: 12px;
   text-decoration: none;
   border: none;
   cursor: pointer;
   transition: transform 0.15s, box-shadow 0.2s, filter 0.2s;
-  box-shadow: 0 8px 20px -8px rgba(124, 58, 237, 0.7);
+  box-shadow: 0 8px 20px -8px rgba(124, 58, 237, 0.7),
+              inset 0 1px 1px rgba(255, 255, 255, 0.25);
   font-family: inherit;
   white-space: nowrap;
 }
@@ -177,13 +205,14 @@
   box-shadow: 0 12px 26px -8px rgba(124, 58, 237, 0.8);
   filter: brightness(1.05);
 }
-/* Logout — crisp outline glass button */
+/* Logout — crisp frosted outline button */
 .navbar-cta-button {
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.6);
   color: #475569;
   box-shadow: none;
   border: 1px solid rgba(15, 23, 42, 0.1);
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 .navbar-cta-button:hover {
   background: #fef2f2;
@@ -201,14 +230,14 @@
   gap: 5px;
   width: 44px;
   height: 44px;
-  background: rgba(120, 120, 140, 0.06);
-  border: none;
+  background: rgba(120, 120, 140, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 12px;
   cursor: pointer;
   padding: 0;
   transition: background 0.2s;
 }
-.navbar-burger:hover { background: rgba(120, 120, 140, 0.12); }
+.navbar-burger:hover { background: rgba(120, 120, 140, 0.14); }
 .navbar-burger span {
   display: block;
   width: 20px;
@@ -222,28 +251,31 @@
 .navbar-burger.is-open span:nth-child(2) { opacity: 0; }
 .navbar-burger.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-/* ===== Responsive ===== */
+/* ============================================
+   MOBILE — clean glass dropdown + tap feedback
+   ============================================ */
 @media (max-width: 880px) {
   .navbar-burger { display: flex; }
 
   .navbar-actions {
     position: absolute;
-    top: 66px;
+    top: 68px;
     left: 0;
     right: 0;
     flex-direction: column;
     align-items: stretch;
     gap: 8px;
-    padding: 16px 20px 22px;
+    padding: 18px 20px 24px;
+    /* Frosted glass dropdown panel */
     background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: saturate(180%) blur(22px);
-    -webkit-backdrop-filter: saturate(180%) blur(22px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 24px 40px -20px rgba(30, 27, 75, 0.35);
-    transform: translateY(-12px);
+    backdrop-filter: saturate(180%) blur(24px);
+    -webkit-backdrop-filter: saturate(180%) blur(24px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 24px 44px -22px rgba(30, 27, 75, 0.4);
+    transform: translateY(-14px);
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.2s, transform 0.2s;
+    transition: opacity 0.25s ease, transform 0.25s ease;
   }
   .navbar-actions.is-open {
     transform: translateY(0);
@@ -254,19 +286,37 @@
   .navbar-nav {
     flex-direction: column;
     align-items: stretch;
-    gap: 2px;
+    gap: 4px;
     background: transparent;
+    border: none;
     padding: 0;
   }
+
+  /* No hover blob on touch devices */
+  .navbar-blob { display: none; }
+
   .navbar-link {
-    padding: 12px 14px;
+    padding: 13px 16px;
     font-size: 15px;
+    border-radius: 12px;
+    transition: background 0.15s, transform 0.1s, color 0.15s;
+  }
+  /* Tap feedback — frosted glass flash + press-in when a link is tapped */
+  .navbar-link:active {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(8px) saturate(160%);
+    -webkit-backdrop-filter: blur(8px) saturate(160%);
+    box-shadow: 0 4px 14px -4px rgba(30, 27, 75, 0.3),
+                inset 0 1px 1px rgba(255, 255, 255, 0.9);
+    transform: scale(0.98);
+    color: #4f46e5;
   }
 
   .navbar-divider {
     width: auto;
     height: 1px;
     margin: 8px 0;
+    background: rgba(15, 23, 42, 0.08);
   }
 
   .navbar-auth {
@@ -274,12 +324,16 @@
     align-items: stretch;
     gap: 10px;
   }
+  .navbar-user,
   .navbar-user-link {
     justify-content: flex-start;
-    padding: 8px 12px;
+    padding: 9px 13px;
+    border-radius: 14px;
   }
+  .navbar-user-link:active { transform: scale(0.98); }
   .navbar-cta {
     text-align: center;
     padding: 13px;
   }
+  .navbar-cta:active { transform: scale(0.98); }
 }

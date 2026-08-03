@@ -58,7 +58,6 @@ const FAQS = [
   { q: "Where is my data stored?", a: "Right now everything is saved securely in your browser on this device. Nothing is shared publicly." },
 ];
 
-// Split a stat value like "120K+" into number(120), suffix("K+")
 function parseStat(value) {
   const match = value.match(/^([\d.]+)(.*)$/);
   if (!match) return { num: 0, suffix: value };
@@ -114,25 +113,31 @@ function Home() {
       const EASE = "power3.out";
       const TOGGLE = "play reverse play reverse";
 
+      // Mobile: trigger later + gentler timing so stacked sections don't
+      // animate all at once or feel rushed.
+      const isMobile = window.innerWidth <= 768;
+      const START = isMobile ? "top 92%" : "top 82%";
+      const DUR = isMobile ? 0.7 : 1;
+      const STAG = isMobile ? 0.08 : 0.12;
+      const Y = isMobile ? 26 : 40;
+
       const reveal = (targets, trigger, opts = {}) =>
         gsap.from(targets, {
           opacity: 0,
-          y: 40,
-          duration: 1,
+          y: Y,
+          duration: DUR,
           ease: EASE,
-          stagger: 0.12,
-          scrollTrigger: { trigger, start: "top 82%", toggleActions: TOGGLE },
+          stagger: STAG,
+          scrollTrigger: { trigger, start: START, toggleActions: TOGGLE },
           ...opts,
         });
 
       // ===== 1. HERO — word-by-word title reveal + text timeline =====
-      // Split the hero title into word spans (keeps the accent styling)
       const titleEl = rootRef.current.querySelector(".hm-hero-title");
       if (titleEl && !titleEl.dataset.split) {
         titleEl.dataset.split = "1";
         const accentEl = titleEl.querySelector(".hm-accent");
         const accentText = accentEl ? accentEl.textContent : "";
-        // Rebuild: wrap each word in a span; keep the accent word highlighted
         const raw = titleEl.textContent;
         const words = raw.split(" ");
         titleEl.innerHTML = words
@@ -179,10 +184,10 @@ function Home() {
       });
       window.__hmPressHandlers = pressHandlers;
 
-      // ===== 2. STATS — fade up + COUNT-UP numbers =====
-      reveal(".hm-stat", ".hm-stats-band", { y: 30, duration: 0.9, stagger: 0.1 });
+      // ===== 2. STATS — fade up =====
+      reveal(".hm-stat", ".hm-stats-band", { y: isMobile ? 24 : 30, duration: DUR, stagger: 0.1 });
 
-      // Count-up: animate each stat number from 0 to its target when in view
+      // Count-up numbers
       gsap.utils.toArray(".hm-stat-value").forEach((el) => {
         const target = parseFloat(el.dataset.target) || 0;
         const suffix = el.dataset.suffix || "";
@@ -192,7 +197,7 @@ function Home() {
           val: target,
           duration: 1.6,
           ease: "power2.out",
-          scrollTrigger: { trigger: ".hm-stats-band", start: "top 80%", toggleActions: "play none none reset" },
+          scrollTrigger: { trigger: ".hm-stats-band", start: START, toggleActions: "play none none reset" },
           onUpdate: () => {
             const shown = isDecimal ? counter.val.toFixed(1) : Math.round(counter.val);
             el.textContent = `${shown}${suffix}`;
@@ -203,8 +208,8 @@ function Home() {
       // ===== Section headings =====
       gsap.utils.toArray(".hm-head").forEach((head) => {
         gsap.from(head, {
-          opacity: 0, y: 30, duration: 1, ease: EASE,
-          scrollTrigger: { trigger: head, start: "top 85%", toggleActions: TOGGLE },
+          opacity: 0, y: Y, duration: DUR, ease: EASE,
+          scrollTrigger: { trigger: head, start: START, toggleActions: TOGGLE },
         });
       });
 
@@ -212,27 +217,27 @@ function Home() {
       reveal(".hm-feature", ".hm-features");
 
       // ===== 4. STEPS =====
-      reveal(".hm-step", ".hm-steps", { stagger: 0.15 });
+      reveal(".hm-step", ".hm-steps", { stagger: isMobile ? 0.1 : 0.15 });
 
       // ===== 5. TEMPLATES — stagger + tiny scale =====
       gsap.from(".hm-tpl", {
-        opacity: 0, y: 40, scale: 0.96, duration: 1, ease: EASE, stagger: 0.1,
-        scrollTrigger: { trigger: ".hm-templates", start: "top 82%", toggleActions: TOGGLE },
+        opacity: 0, y: Y, scale: 0.96, duration: DUR, ease: EASE, stagger: STAG,
+        scrollTrigger: { trigger: ".hm-templates", start: START, toggleActions: TOGGLE },
       });
 
       // ===== 6. WHY =====
-      reveal(".hm-why-card", ".hm-why", { stagger: 0.15 });
+      reveal(".hm-why-card", ".hm-why", { stagger: isMobile ? 0.1 : 0.15 });
 
       // ===== 7. TESTIMONIALS =====
-      reveal(".hm-testimonial", ".hm-testimonials", { stagger: 0.15 });
+      reveal(".hm-testimonial", ".hm-testimonials", { stagger: isMobile ? 0.1 : 0.15 });
 
       // ===== 8. FAQ =====
-      reveal(".hm-faq-item", ".hm-faq", { y: 26, duration: 0.9, stagger: 0.1 });
+      reveal(".hm-faq-item", ".hm-faq", { y: isMobile ? 20 : 26, duration: DUR, stagger: 0.1 });
 
       // ===== 9. CTA =====
       gsap.from(".hm-cta-inner > *", {
-        opacity: 0, y: 36, duration: 1, ease: EASE, stagger: 0.12,
-        scrollTrigger: { trigger: ".hm-cta", start: "top 82%", toggleActions: TOGGLE },
+        opacity: 0, y: Y, duration: DUR, ease: EASE, stagger: STAG,
+        scrollTrigger: { trigger: ".hm-cta", start: START, toggleActions: TOGGLE },
       });
     }, rootRef);
 
@@ -452,8 +457,7 @@ function Home() {
               <span className="hm-footer-mark">R/</span> Resume Builder
             </span>
             <p className="hm-footer-tag">Build. Download. Get hired.</p>
-                        <p className="hm-footer-credit">A project by Suvaid Dawar</p>
-
+            <p className="hm-footer-credit">A project by Suvaid Dawar</p>
           </div>
           <div className="hm-footer-col">
             <span className="hm-footer-h">Product</span>

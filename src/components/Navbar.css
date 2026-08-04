@@ -1,13 +1,14 @@
 /* ============================================
-   NAVBAR — Soft Neumorphic Glass (subtle transparency)
+   NAVBAR — Soft Neumorphic Glass
+   Puffy frosted look with soft shadows (like the toggles)
    ============================================ */
 .navbar {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: linear-gradient(145deg, rgba(238, 241, 246, 0.85), rgba(226, 230, 238, 0.85));
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: linear-gradient(145deg, #eef1f6, #e2e6ee);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.6);
   box-shadow: 0 8px 24px -12px rgba(163, 177, 198, 0.6);
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -49,6 +50,7 @@
   color: #6366f1;
   font-size: 15px;
   font-weight: 800;
+  /* Neumorphic raised effect */
   box-shadow: 4px 4px 8px rgba(163, 177, 198, 0.55),
               -4px -4px 8px rgba(255, 255, 255, 0.9);
 }
@@ -67,7 +69,8 @@
   gap: 4px;
   padding: 6px;
   border-radius: 16px;
-  background: rgba(230, 234, 241, 0.7);
+  background: #e6eaf1;
+  /* Inset (pressed-in) neumorphic look */
   box-shadow: inset 3px 3px 6px rgba(163, 177, 198, 0.5),
               inset -3px -3px 6px rgba(255, 255, 255, 0.9);
 }
@@ -82,6 +85,7 @@
   border-radius: 11px;
   transition: color 0.2s, box-shadow 0.25s, background 0.25s;
 }
+/* Hover — the link "lifts" out like a soft button */
 .navbar-link:hover {
   color: #6366f1;
   background: linear-gradient(145deg, #eef1f6, #dfe4ec);
@@ -240,9 +244,9 @@
     align-items: stretch;
     gap: 10px;
     padding: 18px 20px 24px;
-    background: linear-gradient(145deg, rgba(238, 241, 246, 0.92), rgba(226, 230, 238, 0.92));
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+    background: linear-gradient(145deg, #eef1f6, #e2e6ee);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.6);
     box-shadow: 0 20px 40px -18px rgba(163, 177, 198, 0.7);
     transform: translateY(-14px);

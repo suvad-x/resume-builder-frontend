@@ -5,7 +5,7 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  background: linear-gradient(145deg, rgba(238, 241, 246, 0.80), rgba(226, 230, 238, 0.85));
+  background: linear-gradient(145deg, rgba(238, 241, 246, 0.85), rgba(226, 230, 238, 0.85));
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.6);
